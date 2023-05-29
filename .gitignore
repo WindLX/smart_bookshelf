@@ -1,1 +1,4 @@
 *.code-workspace
+ai/PaddleOCR/
+logs/
+temp/
