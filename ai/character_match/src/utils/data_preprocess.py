@@ -42,7 +42,7 @@ class DataPreprocesser:
         offset_y = index % self.len
         return (self.data[offset_x], self.data[offset_y])
 
-    def get_form_character(self, character: str) -> list[str]:
+    def get_form_character(self, character: str) -> list[str] | None:
         """在数据文件中查找一个汉字的所有形近字
 
         Args:
@@ -50,20 +50,27 @@ class DataPreprocesser:
             character (str): 待查找的汉字
 
         Returns:
-            list[str]: 匹配结果
+            list[str] | None: 匹配结果
         """
+        # with open(self.file_path, 'r', encoding='utf-8') as file:
+        #     for line in file:
+        #         line = line.strip()
+        #         if line != "":
+        #             if line[-1] == "，":
+        #                 line = line[:-1]
+        #         if character in line:
+        #             if self.split != "":
+        #                 characters = line.split(self.split)
+        #             else:
+        #                 characters = list(line)
+        #             characters = list(filter(lambda x: x != "", characters))
+        #             return characters
+        # return None
         with open(self.file_path, 'r', encoding='utf-8') as file:
             for line in file:
-                line = line.strip()
-                if line != "":
-                    if line[-1] == "，":
-                        line = line[:-1]
+                line = line.strip().rstrip('，')
                 if character in line:
-                    if self.split != "":
-                        characters = line.split(self.split)
-                    else:
-                        characters = list(line)
-                    characters = list(filter(lambda x: x != "", characters))
+                    characters = [c for c in line if c != ""]
                     return characters
         return None
     

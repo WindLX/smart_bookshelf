@@ -97,7 +97,7 @@ if __name__ == "__main__":
     font_path = './ai/character_match/fonts/simhei.ttf'
     save_path = './ai/character_match/param'
     log_path = './ai/character_match/logs'
-    input_name = 'simchar_weights_5_30_15_32.pth'
+    input_name = 'simchar_weights_5_30_17_14.pth'
     output_name= 'simchar_weights.pth'
     
     train_times = 50

@@ -7,36 +7,8 @@ img = cv2.imread('../pic/4.jpg', 1)
 img = img[700: 2800, 0: 5000]
 img = cv2.resize(img, None, fx=0.5, fy=0.5, interpolation = cv2.INTER_CUBIC)
 
-# cv2.imshow("a", img)
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
-
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ret = np.zeros_like(gray)
-
-# def CornerHarris(gray, ret):
-#     gray_lpl1 = np.float32(gray)
-
-#     block_size = 2  # 角点检测窗口大小
-#     aperture_size = 11  # Sobel算子大小
-#     k = 0.012  # Harris角点检测参数
-#     thresh = 0.3  # 角点响应值的阈值
-
-#     # 计算Harris角点响应值
-#     dst = cv2.cornerHarris(gray_lpl1, block_size, aperture_size, k)
-
-#     # 归一化响应值
-#     dst_norm = cv2.normalize(dst, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
-
-#     # 选取角点
-#     ret[dst_norm > thresh * dst_norm.max()] = [255]
-
-#     # 转换图像格式，方便显示
-#     ret = np.uint8(ret)
-
-#     return gray*0.2 + cv2.bitwise_not(ret)*0.4
-
-# CornerHarris(gray, ret)
 
 edge = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 13, -2)
 
@@ -120,5 +92,5 @@ for i, region in enumerate(regions):
 print(len(list(filter(lambda x: not(x.shape[0] <= 10 or x.shape[1] <= 15), regions))))
 # cv2.imshow("img", img)
 # cv2.imshow("white", white)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()

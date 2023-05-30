@@ -48,42 +48,42 @@ class DataSet:
     def __len__(self):
         return len(self.data_list)
 
-url = 'http://localhost:8080/ocr'
 
-folder_path = "./segment/temp"
+if __name__ == "__main__":
+    url = 'http://localhost:8080/ocr'
+    folder_path = "./segment/temp"
+    file_list = []
 
-file_list = []
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            file_list.append(file_path)
 
-for root, dirs, files in os.walk(folder_path):
-    for file in files:
-        file_path = os.path.join(root, file)
-        file_list.append(file_path)
+    results = []
 
-results = []
+    for file_path in file_list:
+        print(file_path)
+        files = {'file': open(file_path, 'rb')}
+        response = requests.post(url, files=files)
+        response.encoding = 'utf-8'
 
-for file_path in file_list:
-    print(file_path)
-    files = {'file': open(file_path, 'rb')}
-    response = requests.post(url, files=files)
-    response.encoding = 'utf-8'
+        if response.status_code == 200:
+            result = json.loads(response.text)
+            class_objects = []
+            for item in result[0]:
+                points = item[0]
+                ocr_result = item[1][0]
+                confidence = item[1][1]
+                data_item = DataItem(points, ocr_result, confidence)
+                class_objects.append(data_item)
+            if len(class_objects) > 0:
+                results.append(DataSet(class_objects, file_path))
+        else:
+            print('File upload failed:', response.text)
 
-    if response.status_code == 200:
-        result = json.loads(response.text)
-        class_objects = []
-        for item in result[0]:
-            points = item[0]
-            ocr_result = item[1][0]
-            confidence = item[1][1]
-            data_item = DataItem(points, ocr_result, confidence)
-            class_objects.append(data_item)
-        if len(class_objects) > 0:
-            results.append(DataSet(class_objects, file_path))
-    else:
-        print('File upload failed:', response.text)
-
-print(len(results))
-for e in results:
-    if len(e) > 0:
-        # ee = max(e, key=lambda x: x.area)
-        print(e)
-    print("------------")
+    print(len(results))
+    for e in results:
+        if len(e) > 0:
+            # ee = max(e, key=lambda x: x.area)
+            print(e)
+        print("------------")

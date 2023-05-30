@@ -46,7 +46,7 @@ def test(model, test_loader, save_path: str, weight_file: str):
         loss = criterion(outputs, labels)
         acc = accuracy(labels, outputs)
         
-        print(f"  Batch [{index}/{test_len}]: Loss: {loss}, Acc: {acc}")
+        print(f"  Batch [{index + 1}/{test_len}]: Loss: {loss}, Acc: {acc}")
         
         test_loss += loss.item()
         test_acc += acc
@@ -60,13 +60,13 @@ if __name__ == "__main__":
     file_path = './ai/character_match/data/data_1.txt'
     font_path = './ai/character_match/fonts/simhei.ttf'
     save_path = './ai/character_match/param'
-    weight_file = 'simchar_weights.pth'
+    weight_file = 'simchar_weights_5_30_17_14.pth'
     
     batch_size = 64
     shuffle = True
     num_workers = 4
     prop = 0
-    dataset_size = 100
+    dataset_size = 1000
     
     test_dataset = SimCharDataSet(file_path=file_path, font_path=font_path, dataset_size=dataset_size, prop=prop, split="")
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)

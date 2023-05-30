@@ -32,8 +32,8 @@ def transfer_model(model, save_path: str, input_name: str, output_name: str, bat
     
 if __name__ == "__main__":
     save_path = './ai/character_match/param'
-    input_name = 'simchar_weights_5_30_15_32.pth'
-    output_name = 'simchar_5_30_15_32.onnx'
+    input_name = 'simchar_weights_5_30_17_14.pth'
+    output_name = 'simchar_5_30_17_14.onnx'
     
     batch_size = 1
     
