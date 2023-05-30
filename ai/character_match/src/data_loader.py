@@ -5,17 +5,18 @@ from utils.data_preprocess import DataPreprocesser, get_image
 class SimCharDataSet(Dataset):
     """形近汉字匹配数据加载器
     """
-    def __init__(self, file_path: str, font_path: str, dataset_size: int, size: int=32, prop: float=0.1) -> None:
+    def __init__(self, file_path: str, font_path: str, dataset_size: int, split: str, size: int=32, prop: float=0.0) -> None:
         """构造函数
 
         Args:
             file_path (str): 数据文件路径
             font_path (str): 字体文件路径
-            size (int, optional): 图片大小. Defaults to 32.
             dataset_size (int, optional): 数据集的大小.
-            prop (float): 相似容限
+            split (str): 分隔符
+            size (int, optional): 图片大小. Defaults to 32.
+            prop (float, optional): 相似容限. Defaults to 0.0 .
         """
-        self.data_preprocesser = DataPreprocesser(file_path, dataset_size, prop)
+        self.data_preprocesser = DataPreprocesser(file_path=file_path, dataset_size=dataset_size, prop=prop, split=split)
         self.font_path = font_path
         self.size = size
         
@@ -41,7 +42,7 @@ class SimCharDataSet(Dataset):
 if __name__ == "__main__":
     file_path = './ai/character_match/data/data_0.txt'
     font_path = './ai/character_match/fonts/simkai.ttf'
-    dataset = SimCharDataSet(file_path=file_path, font_path=font_path, dataset_size=50)
+    dataset = SimCharDataSet(file_path=file_path, font_path=font_path, dataset_size=50, split="")
 
     batch_size = 8
     shuffle = True

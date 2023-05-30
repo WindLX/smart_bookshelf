@@ -13,11 +13,13 @@ class SimCharModel(nn.Module):
             size (int, optional): 图片大小. Defaults to 32.
         """
         super().__init__()
+        self.size = size
+        dropout_prop = [0.5, 0.3, 0.15, 0.0]
         
-        self.dropout1 = nn.Dropout(p=0.0)
-        self.dropout2 = nn.Dropout(p=0.0)
-        self.dropout3 = nn.Dropout(p=0.0)
-        self.dropout4 = nn.Dropout(p=0.0)
+        self.dropout1 = nn.Dropout(p=dropout_prop[0])
+        self.dropout2 = nn.Dropout(p=dropout_prop[1])
+        self.dropout3 = nn.Dropout(p=dropout_prop[2])
+        self.dropout4 = nn.Dropout(p=dropout_prop[3])
         
         # 定义卷积层
         self.conv1 = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=5, stride=1, padding=1)

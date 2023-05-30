@@ -5,19 +5,21 @@ from PIL import Image, ImageDraw, ImageFont
 class DataPreprocesser:
     """形近字数据库预处理类
     """
-    def __init__(self, file_path: str, dataset_size: int, prop: float=0.1) -> None:
+    def __init__(self, file_path: str, dataset_size: int, split: str, prop: float=0.0) -> None:
         """构造函数
 
         Args:
             file_path (str): 数据文件路径
             dataset_size (int): 数据集的大小
-            prop (float): 相似度容限
+            split (str): 分隔符
+            prop (float, optional): 相似度容限. Defaults to 0.0 .
         """
         self.file_path = file_path
         self.dataset_size = dataset_size
+        self.prop = prop
+        self.split = split
         self.len = self.__calc_len(dataset_size)
         self.data = self.get_partial_characters()
-        self.prop = prop
         
     def __len__(self) -> int:
         """获取汉字数量
@@ -57,7 +59,11 @@ class DataPreprocesser:
                     if line[-1] == "，":
                         line = line[:-1]
                 if character in line:
-                    characters = line.split('，')
+                    if self.split != "":
+                        characters = line.split(self.split)
+                    else:
+                        characters = list(line)
+                    characters = list(filter(lambda x: x != "", characters))
                     return characters
         return None
     
@@ -77,7 +83,11 @@ class DataPreprocesser:
                 if line != "":
                     if line[-1] == "，":
                         line = line[:-1]
-                    characters = line.split('，')  # 假设汉字之间是以中文逗号分隔的
+                    if self.split != "":
+                        characters = line.split(self.split)
+                    else:
+                        characters = list(line)
+                    characters = list(filter(lambda x: x != "", characters))
                     count += len(characters)
         if dataset_size < count:
             return dataset_size
@@ -95,7 +105,6 @@ class DataPreprocesser:
         """
         char_1, char_2 = self.__getitem__(index)
         return random.uniform(1.0 - self.prop, 1.0) if char_2 in self.get_form_character(char_1) else random.uniform(0, self.prop)
-        # return 1 if char_2 in self.get_form_character(char_1) else 0
     
     def get_partial_characters(self) -> np.ndarray[str]:
         """获取部分汉字
@@ -110,14 +119,19 @@ class DataPreprocesser:
                 if line != "":
                     if line[-1] == "，":
                         line = line[:-1]
-                    chars = np.array(line.split('，'), dtype='U1')
+                    if self.split != "":
+                        characters = line.split(self.split)
+                    else:
+                        characters = list(line)
+                    characters = list(filter(lambda x: x != "", characters))
+                    chars = np.array(characters, dtype='U1')
                     all_chars = np.concatenate((all_chars, chars))
         sample_chars = np.random.choice(all_chars, self.dataset_size)
         for s in sample_chars:
             sample_chars = np.concatenate((sample_chars, self.get_form_character(s)))
 
         sample_chars = np.unique(sample_chars)
-        return np.random.choice(sample_chars, self.dataset_size)
+        return np.random.choice(sample_chars, self.dataset_size, replace=False)
     
     @property
     def all_characters(self) -> list[str]:
@@ -133,7 +147,12 @@ class DataPreprocesser:
                 if line != "":
                     if line[-1] == "，":
                         line = line[:-1]
-                    all_chars.extend(line.split('，'))
+                    if self.split != "":
+                        characters = line.split(self.split)
+                    else:
+                        characters = list(line)
+                    characters = list(filter(lambda x: x != "", characters))
+                    all_chars.extend(characters)
         return all_chars
     
     @property
@@ -182,13 +201,13 @@ def get_image(chars: tuple[str], font_path: str, size: int=32) -> np.ndarray:
 
 # 示例用法
 if __name__ == "__main__":
-    file_path = './ai/character_match/data/data_0.txt'
+    file_path = './ai/character_match/data/data_1.txt'
     font_path = './ai/character_match/fonts/simkai.ttf'
-    dp = DataPreprocesser(file_path, dataset_size=64)
-    image = get_image(("你", "二"), font_path)
-    np.set_printoptions(threshold=np.inf)
-    print(image)
-    # dd = dp.partial_characters
+    dp = DataPreprocesser(file_path, dataset_size=64, split="")
+    # image = get_image(("你", "二"), font_path)
+    # np.set_printoptions(threshold=np.inf)
+    # print(image)
+    print(dp.data)
     
     # input_character = input('请输入要查找的汉字：')
     # result = dp.get_similar_character(input_character)
