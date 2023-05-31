@@ -1,18 +1,37 @@
+from __future__ import annotations
 import requests
 import json
-import os
+from pprint import pprint
+import time
+from typing import Dict, List
+
+def timer(func: callable):
+    """计时器装饰器
+
+    Args:
+        func (callable): 待测量运行时间的函数
+    """
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f"[{func.__name__}] exec time: {elapsed_time:.2f} s")
+        return result
+    return wrapper
 
 class DataItem:
-    def __init__(self, points, ocr_result, confidence):
+    def __init__(self, points: List, ocr_result: str, confidence: float):
         self.points = points
         self.ocr_result = ocr_result
         self.confidence = confidence
         
     def __str__(self) -> str:
         s = ""
-        s += f'Points: {self.points}\n'
-        s += f'OCR Result: {self.ocr_result}\n'
-        s += f'Confidence: {self.confidence}\n'
+        s += f'  Points: {self.points}\n'
+        s += f'  OCR Result: {self.ocr_result}\n'
+        s += f'  Confidence: {self.confidence}\n'
+        s += '  ---\n'
         return s
     
     @property
@@ -34,56 +53,68 @@ class DataItem:
         return len(self.ocr_result)
 
 class DataSet:
-    def __init__(self, data_list, file_name):
+    def __init__(self, data_list: List, file_name: str, coorinate: float):
         self.data_list = data_list
         self.file_name = file_name
+        self.coorinate = coorinate
     
     def __str__(self):
         s = ""
         s += f"File Name: {self.file_name}\n"
-        for d in self.data_list:
+        s += f"Coorinate: {self.coorinate}\n"
+        for i, d in enumerate(self.data_list):
+            s += f"  index: {i}\n"
             s += str(d)
         return s
             
     def __len__(self):
         return len(self.data_list)
 
+    @staticmethod
+    def DataSetbuilder(raw_data: Dict[str, List]) -> List[DataSet]:
+        data_sets = []
+        for key, value in raw_data.items():
+            data_list = []
+            for raw_data_item in value[1][0]:
+                data_list.append(DataItem(points=raw_data_item[0], ocr_result=raw_data_item[1][0], confidence=raw_data_item[1][1]))
+            data_set = DataSet(file_name=key, coorinate=value[0], data_list=data_list)
+            data_sets.append(data_set)
+        return data_sets
+    
+    @property
+    def connected_result(self) -> str:
+        s = [x.ocr_result for x in self.data_list]
+        s = ' '.join(s)
+        return s
+
+@timer
+def post(url: str, file_path: str) -> Dict[str, List]:
+    """发起 OCR 请求
+
+    Args:
+        url (str): 服务器地址
+        file_path (str): 文件路径
+        
+    Returns:
+        dict[str, list]: 识别结果
+    """
+    files = {'file': open(file_path, 'rb')}
+    
+    print("start post")
+    response = requests.post(url, files=files)
+    response.encoding = 'utf-8'
+
+    if response.status_code == 200:
+        result = json.loads(response.text)
+        pprint(result)
+        return result
 
 if __name__ == "__main__":
     url = 'http://localhost:8080/ocr'
-    folder_path = "./segment/temp"
-    file_list = []
-
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            file_path = os.path.join(root, file)
-            file_list.append(file_path)
-
-    results = []
-
-    for file_path in file_list:
-        print(file_path)
-        files = {'file': open(file_path, 'rb')}
-        response = requests.post(url, files=files)
-        response.encoding = 'utf-8'
-
-        if response.status_code == 200:
-            result = json.loads(response.text)
-            class_objects = []
-            for item in result[0]:
-                points = item[0]
-                ocr_result = item[1][0]
-                confidence = item[1][1]
-                data_item = DataItem(points, ocr_result, confidence)
-                class_objects.append(data_item)
-            if len(class_objects) > 0:
-                results.append(DataSet(class_objects, file_path))
-        else:
-            print('File upload failed:', response.text)
-
-    print(len(results))
-    for e in results:
-        if len(e) > 0:
-            # ee = max(e, key=lambda x: x.area)
-            print(e)
-        print("------------")
+    file_path = "./pic/4.jpg"
+    
+    res = post(url=url, file_path=file_path)
+    data_sets = DataSet.DataSetbuilder(res)
+    for e in data_sets:
+        print(e.connected_result)
+        
