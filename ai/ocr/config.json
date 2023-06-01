@@ -1,0 +1,17 @@
+{
+    "segment_config": {
+        "input_path": "./pic",
+        "output_path": "./temp",
+        "img_clip": [[700, 2800], [0, 5000]],
+        "img_scale": 0.3,
+        "angle_point": [[50, 0], [1332, 0], [1382, 630], [0, 630]],
+        "min_height_rate": 0.5,
+        "eps": 2,
+        "distance": 10
+    },
+    "ocr_config": {
+        "input_path": "./temp",
+        "use_gpu": true,
+        "thread_count": 4
+    }
+}

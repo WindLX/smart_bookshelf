@@ -1,8 +1,8 @@
+from __future__ import annotations
 from concurrent.futures import ThreadPoolExecutor
 import os
 from paddleocr import PaddleOCR
 from typing import List, Dict, Tuple, Any
-from config import config
 from utils import logger
 
 class OCRer:
@@ -18,6 +18,17 @@ class OCRer:
         self.input_path = input_path
         self.use_gpu = use_gpu
         self.thread_count = thread_count
+        
+    def builder(config: Dict[str, Any]) -> OCRer:
+        """OCRer构造器
+
+        Args:
+            config (Dict[str, Any]): 配置
+
+        Returns:
+            OCRer: OCR
+        """
+        return OCRer(input_path=config["input_path"], use_gpu=config["use_gpu"], thread_count=config["thread_count"])
 
     def __get_image_files(self, input_path: str) -> List[str]:
         """获取目录下的所有图片文件
@@ -77,6 +88,11 @@ class OCRer:
         return self.__ocr(files)
     
 if __name__ == "__main__":
-    ocrer = OCRer(input_path=config['output_path'], thread_count=config['ocr_thread_count'])
+    config = {
+        'input_path': './temp',
+        'use_gpu': True,
+        'ocr_thread_count': 4
+    }
+    ocrer = OCRer.builder(config)
     res = ocrer.run_ocr()
     print(res)
