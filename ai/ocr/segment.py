@@ -4,33 +4,31 @@ import cv2
 import numpy as np
 import shutil
 from sklearn.cluster import DBSCAN
-from typing import Tuple, List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any
 from utils import logger
 
 class Segmenter:
     """图像切割器
     """
-    def __init__(self, input_path: str, output_path: str, img_clip: Tuple[slice], img_scale: float, angle_point: Optional[List], min_height_rate: float, eps: float, distance: float) -> None:
+    def __init__(self, input_path: str, output_path: str, img_scale: float, angle_point: Optional[List], min_height_rate: float, eps: float, count: int) -> None:
         """构造函数
 
         Args:
             input_path (str): 原始图片路径
             output_path (str): 切割后图片输出地址
-            img_clip (tuple[slice]): 图像裁切索引
-            img_scale (float): 图像缩放大小
+            img_scale: (float): 图片缩放大小
             angle_point (list | optional): 角点位置
             min_height_rate (float): 分割直线的最小长度与高度之比
             eps (float): 聚类直线的最小距离
-            distance (float): 分割直线的最小距离
+            count (int): 书的最大数量
         """
         self.input_path = input_path
         self.output_path = output_path
-        self.img_clip = img_clip
         self.img_scale = img_scale
         self.angle_point = angle_point
         self.min_height_rate = min_height_rate
         self.eps = eps
-        self.distance = distance
+        self.count = count
         self.clean()
 
     @staticmethod
@@ -43,7 +41,7 @@ class Segmenter:
         Returns:
             Segmenter: 分割器
         """
-        return Segmenter(input_path=config["input_path"], output_path=config["output_path"], img_clip=config["img_clip"], img_scale=config["img_scale"], angle_point=config["angle_point"], min_height_rate=config["min_height_rate"], eps=config["eps"], distance=config["distance"])
+        return Segmenter(input_path=config["input_path"], output_path=config["output_path"], img_scale=config["img_scale"], angle_point=config["angle_point"], min_height_rate=config["min_height_rate"], eps=config["eps"], count=config["count"])
     
     def clean(self):
         """清理 temp 文件夹
@@ -62,15 +60,21 @@ class Segmenter:
             img_name (str): 原始图片名称
         """
         img = cv2.imread(f"{self.input_path}/{img_name}", 1)
-        img = img[self.img_clip]
-        img = cv2.resize(img, None, fx=self.img_scale, fy=self.img_scale, interpolation = cv2.INTER_CUBIC)
+        
+        angle_point = np.array([[img.shape[1] * self.angle_point[0][0], img.shape[0] * self.angle_point[0][1]], [img.shape[1] * self.angle_point[1][0], img.shape[0] * self.angle_point[1][1]], [img.shape[1] * self.angle_point[2][0], img.shape[0] * self.angle_point[2][1]], [img.shape[1] * self.angle_point[3][0], img.shape[0] * self.angle_point[3][1]]]) / 100
         
         # 角点定位
         if self.angle_point is not None:
-            src_pts = np.array(self.angle_point, dtype=np.float32)
+            src_pts = np.array(angle_point, dtype=np.float32)
             dst_pts = np.array([[0, 0], [img.shape[1], 0], [img.shape[1], img.shape[0]], [0, img.shape[0]]], dtype=np.float32)
             M = cv2.getPerspectiveTransform(src_pts, dst_pts)
             img = cv2.warpPerspective(img, M, (img.shape[1], img.shape[0]))
+
+        img = cv2.resize(img, None, fx=self.img_scale, fy=self.img_scale, interpolation = cv2.INTER_CUBIC)
+        
+        # cv2.imshow("1", img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
         
         # 预处理
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -97,20 +101,12 @@ class Segmenter:
         # 聚类
         lines = cluster(lines=lines, min_height=self.min_height_rate * gray.shape[0], eps=self.eps)
         
-        # for line in lines:
-        #     x1, y1 ,x2, y2 = line
-        #     cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
-            
-        # cv2.imshow("1", img)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
-        
         # 区域切割
         self.clean()
-        regions, self.coorinate = crop_regions(img, sort_lines(lines), self.distance)
+        regions, self.coorinate = crop_regions(img, sort_lines(lines), gray.shape[1] / self.count)
         count = 0        
         for region in regions:
-            if region.shape[0] <= self.distance or region.shape[1] <= 15:
+            if region.shape[1] <= gray.shape[1] / self.count:
                 continue
             cv2.imwrite(f'{self.output_path}/{count}.jpg', region)
             count += 1
@@ -168,12 +164,12 @@ def judge_width(i, sorted_lines, delta_index, distance):
     else:
         x1, _, x2, _ = line1
         pt1 = (min(x1, x2), 0)
-        pt2 = (max(x1, x2), 1000)
+        pt2 = (max(x1, x2), 10000)
         return (pt1, pt2, delta_index)
     x1, _, x2, _ = line1
     x3, _, x4,_ = line2
     pt1 = (min(x1, x2), 0)
-    pt2 = (max(x3, x4), 1000)
+    pt2 = (max(x3, x4), 10000)
     if pt2[0] - pt1[0] <= distance:
         if i + delta_index < len(sorted_lines):
             delta_index += 1
@@ -188,12 +184,11 @@ if __name__ == "__main__":
     config = {
         'input_path': './pic',
         'output_path': './ai/ocr/temp',
-        'img_clip': (slice(700, 2800), slice(0, 5000)),
-        'img_scale': 0.3,
-        'angle_point': [[50, 0], [1332, 0], [1382, 630], [0, 630]],
-        'min_height_rate': 0.5,
-        'eps': 2,
-        'distance': 10
+        'img_scale': 1,
+        'angle_point': [[3, 23], [96, 23], [99, 82], [0, 82]],
+        'min_height_rate': 0.1,
+        'eps': 3,
+        'count': 200
     }
     
     segmenter = Segmenter.builder(config)

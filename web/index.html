@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBookshelf</title>
+    <link rel="stylesheet" href="./style.css" type="text/css">
+</head>
+<body>
+    <nav>
+        <div class="nav-item" id="main">
+            <p>书架 Bookshelf</p>
+        </div>
+        <div class="nav-item" id="config">
+            <p>设置 Config</p>
+        </div>
+    </nav>
+    <div class="page" id="main">
+        <div class="content">
+            <div class="bookshelf">
+                <div id="book1" class="book">
+                    <p>新疆城（续）关于生命、地球 空间和宇宙的更多的新发现 149 4856 社</p>
+                </div>
+                <div id="book2" class="book">
+                    <p>8个未来进行时 英一吉姆·阿尔哈里里 WHAT'S NEXT? N49 A654</p>
+                </div>
+                <div id="book3" class="book">
+                    <p>经典 爱因斯的圣经 N49 215- V2</p>
+                </div>
+            </div>
+            <textarea rows="6" cols="50" class="custom-input" id="search"></textarea>
+            <button class="search">查询</button>
+        </div>
+    </div>
+    <div class="page" id="config">
+        <div class="content">
+            <button class="save">保存 Save</button>
+            <div class="content-block">
+                <div class="block">
+                    <h4 class="title">裁切与透视变换</h4>    
+                    <div class="slider-container">
+                        <div class="point-slider" id="left-top">
+                            <p>LeftTop</p>
+                            <input type="range" id="left-top-x" class="slider" min="0" max="50" step="0.1" value="0">
+                            <input type="range" id="left-top-y" class="slider" min="0" max="50" step="0.1" value="0">
+                        </div>
+                        <div class="point-slider" id="left-bottom">
+                            <p>LeftBottom</p>
+                            <input type="range" id="left-bottom-x" class="slider" min="0" max="50" step="0.1" value="0">
+                            <input type="range" id="left-bottom-y" class="slider" min="50" max="100" step="0.1" value="100">
+                        </div>
+                        <div class="point-slider" id="right-top">
+                            <p>RightTop</p>
+                            <input type="range" id="right-top-x" class="slider" min="50" max="100" step="0.1" value="100">
+                            <input type="range" id="right-top-y" class="slider" min="0" max="50" step="0.1" value="0">
+                        </div>
+                        <div class="point-slider" id="right-bottom">
+                            <p>RightBottom</p>
+                            <input type="range" id="right-bottom-x" class="slider" min="50" max="100" step="0.1" value="100">
+                            <input type="range" id="right-bottom-y" class="slider" min="50" max="100" step="0.1" value="100">
+                        </div>
+                    </div>
+                    <div class="img-container">
+                        <img src="../pic/4.jpg" alt="test" id="image">
+                    </div>
+                </div>
+                <div class="block" id="block2">
+                    <h4 class="title">其他配置</h4>
+                    <div class="line-container">
+                        <h4>OCR服务器地址</h4>
+                        <input type="text" class="custom-input" id="host" value="http://localhost:8080">
+                    </div>
+                    <div class="line-container">
+                        <h4>原始图片暂存路径</h4>
+                        <input type="text" class="custom-input" id="input_path" value="/ocr/pic">
+                    </div>
+                    <div class="line-container">
+                        <h4>切割图片暂存路径</h4>
+                        <input type="text" class="custom-input" id="output_path" value="/ocr/temp">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>图片缩放</h4>
+                            <h4 class="value"></h4>
+                        </div>
+                        <input type="range" min="0.01" max="1" step="0.01" value="1" id="scale">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>聚类半径</h4>
+                            <h4 class="value"></h4>
+                        </div>
+                        <input type="range" min="1" max="10" step="1" value="2" id="eps">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>最小书高</h4>
+                            <h4 class="value"></h4>
+                        </div>
+                        <input type="range" min="0.01" max="1" step="0.01" value="0.1" id="min_height_rate">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>最大数量</h4>
+                            <h4 class="value"></h4>
+                        </div>
+                        <input type="range" min="1" max="300" step="1" value="50" id="count">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>启用GPU</h4>
+                        </div>
+                        <input type="range" min="0" max="1" step="1" value="1" class="toggle" id="use_gpu">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>OCR线程数</h4>
+                            <h4 class="value" id="th"></h4>
+                        </div>
+                        <input type="range" min="1" max="8" step="1" value="4" id="thread_count">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="./script.js"></script>
+</body>
+</html>

@@ -2,12 +2,11 @@
     "segment_config": {
         "input_path": "./pic",
         "output_path": "./temp",
-        "img_clip": [[700, 2800], [0, 5000]],
         "img_scale": 0.3,
-        "angle_point": [[50, 0], [1332, 0], [1382, 630], [0, 630]],
+        "angle_point": [[2, 21], [97, 21], [100, 82], [0, 83]],
         "min_height_rate": 0.5,
         "eps": 2,
-        "distance": 10
+        "count": 200
     },
     "ocr_config": {
         "input_path": "./temp",

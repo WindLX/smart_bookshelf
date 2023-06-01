@@ -1,5 +1,7 @@
 __pycache__/
+.VSCodeCounter/
 *.code-workspace
 ignore/
 log/
 temp/
+target/
