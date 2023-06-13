@@ -7,7 +7,7 @@ CC = "gcc"
 CFLAGS = "-Wall -Icore/include"
 
 # List of source files
-SRCS = ["./src/service/database_server.c", "./src/main.c", "./include/cJSON.c"]
+SRCS = ["./src/main.c", "./src/lib/cJSON.c", "./src/service/database_server.c", "./src/utils/event_bus.c"]
 
 # Generate object file names from source files
 OBJS = [os.path.join("build", os.path.splitext(os.path.basename(src))[0] + ".o") for src in SRCS]

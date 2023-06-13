@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "./database_server.h"
+#include "../include/database_server.h"
 
 bool parseBooks(cJSON *books_array, Book **books, int *num_books)
 {
@@ -129,7 +129,6 @@ bool database_server_update(DatabaseServer *self)
     int num_books;
     if (parseBooks(books_array, &books, &num_books))
     {
-        free(self->books);
         self->books = books;
         self->num_books = num_books;
 
