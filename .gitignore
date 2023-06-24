@@ -3,7 +3,6 @@ __pycache__/
 *.code-workspace
 ignore/
 log/
+logs/
 temp/
 target/
-ai/character_match/logs/
-ai/character_match/src/__pycache__/
