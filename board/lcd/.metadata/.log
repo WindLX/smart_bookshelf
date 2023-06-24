@@ -1,0 +1,18 @@
+!SESSION 2023-06-24 14:34:39.184 -----------------------------------------------
+eclipse.buildId=Version 1.10.1
+java.version=11.0.14.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=zh_CN
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-06-24 14:34:47.997
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-06-24 14:34:48.054
+!MESSAGE Log4j initialized with config file /Data/Workspace/smart_bookshelf/shelf/lcd/.metadata/.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-06-24 14:35:02.639
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2023-06-24 14:35:27.361
+!MESSAGE Indexed 'lcd1' (24 sources, 183 headers) in 7.29 sec: 19,878 declarations; 85,320 references; 3 unresolved inclusions; 46 syntax errors; 884 unresolved names (0.83%)
