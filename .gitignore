@@ -5,3 +5,5 @@ ignore/
 log/
 temp/
 target/
+ai/character_match/logs/
+ai/character_match/src/__pycache__/
