@@ -75,7 +75,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  LCD_Init();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -89,7 +89,8 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-
+  LCD_Fill(0,0,LCD_W,LCD_H,WHITE);
+  float t=0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -99,6 +100,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    LCD_ShowString(24,30,"LCD_W:",RED,WHITE,16,0);
+		LCD_ShowIntNum(72,30,LCD_W,3,RED,WHITE,16);
+		LCD_ShowString(24,50,"LCD_H:",RED,WHITE,16,0);
+		LCD_ShowIntNum(72,50,LCD_H,3,RED,WHITE,16);
+		LCD_ShowFloatNum1(20,80,t,4,RED,WHITE,16);
+    t+=0.11;
+    LCD_ShowPicture(65,80,40,40,gImage_1);
   }
   /* USER CODE END 3 */
 }
@@ -188,7 +196,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -220,9 +228,32 @@ static void MX_SPI1_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOG_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, LCD_CS_Pin|LCD_BL_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOG, LCD_DC_Pin|LCD_RST_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : LCD_CS_Pin LCD_BL_Pin */
+  GPIO_InitStruct.Pin = LCD_CS_Pin|LCD_BL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LCD_DC_Pin LCD_RST_Pin */
+  GPIO_InitStruct.Pin = LCD_DC_Pin|LCD_RST_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
 }
 
