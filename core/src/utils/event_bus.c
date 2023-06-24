@@ -23,7 +23,7 @@ void register_handler(EventBus *bus, Handler *handler)
     }
 }
 
-void invoke_event(EventBus *bus, Event *event)
+void publish_event(EventBus *bus, Event *event)
 {
     int i;
     for (i = 0; i < bus->num_handlers; i++)

@@ -27,6 +27,6 @@ void event_bus_drop(EventBus *self);
 
 void register_handler(EventBus *self, Handler *handler);
 
-void invoke_event(EventBus *self, Event *event);
+void publish_event(EventBus *self, Event *event);
 
 #endif

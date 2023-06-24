@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../include/database_server.h"
+#include "../include/event_bus.h"
 
 bool parseBooks(cJSON *books_array, Book **books, int *num_books)
 {
@@ -143,7 +144,7 @@ bool database_server_update(DatabaseServer *self)
     }
 }
 
-Book *database_server_find(DatabaseServer *self, const char *book_name)
+Book *database_server_search(DatabaseServer *self, const char *book_name)
 {
     for (int i = 0; i < self->num_books; i++)
     {

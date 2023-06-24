@@ -32,7 +32,7 @@ int main()
     memcpy(&p, &database_server, sizeof(DatabaseServer *));
     Event event_1 = {"print_data", p};
 
-    invoke_event(event_bus, &event_1);
+    publish_event(event_bus, &event_1);
 
     database_server_drop(database_server);
     event_bus_drop(event_bus);
