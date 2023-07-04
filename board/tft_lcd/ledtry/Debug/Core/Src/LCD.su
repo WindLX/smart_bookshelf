@@ -1,0 +1,11 @@
+../Core/Src/LCD.c:14:6:LCD_Fill	32	static
+../Core/Src/LCD.c:33:6:LCD_DrawPoint	16	static
+../Core/Src/LCD.c:46:6:LCD_DrawLine	64	static
+../Core/Src/LCD.c:88:6:LCD_DrawRectangle	32	static
+../Core/Src/LCD.c:103:6:Draw_Circle	32	static
+../Core/Src/LCD.c:135:6:LCD_ShowChar	40	static
+../Core/Src/LCD.c:190:6:LCD_ShowString	48	static
+../Core/Src/LCD.c:206:5:mypow	24	static
+../Core/Src/LCD.c:224:6:LCD_ShowIntNum	48	static
+../Core/Src/LCD.c:256:6:LCD_ShowFloatNum1	56	static
+../Core/Src/LCD.c:284:6:LCD_ShowPicture	32	static

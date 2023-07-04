@@ -1,0 +1,5 @@
+../Core/Src/LCD_Init.c:11:6:LCD_WR_DATA8	16	static
+../Core/Src/LCD_Init.c:27:6:LCD_WR_DATA	16	static
+../Core/Src/LCD_Init.c:34:6:LCD_WR_REG	16	static
+../Core/Src/LCD_Init.c:49:6:LCD_Address_Set	24	static
+../Core/Src/LCD_Init.c:93:6:LCD_Init	16	static
