@@ -1,0 +1,17 @@
+17:18:49 **** Incremental Build of configuration Debug for project oled1 ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32H7A3xxQ -c -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "oled1.elf" @"objects.list"   -mcpu=cortex-m7 -T"/Data/Workspace/smart_bookshelf/board/oled/oled1/STM32H7A3ZITXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="oled1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: oled1.elf
+ 
+arm-none-eabi-size   oled1.elf 
+arm-none-eabi-objdump -h -S  oled1.elf  > "oled1.list"
+   text	   data	    bss	    dec	    hex	filename
+  29080	     24	   1872	  30976	   7900	oled1.elf
+Finished building: default.size.stdout
+ 
+Finished building: oled1.list
+ 
+
+17:18:50 Build Finished. 0 errors, 0 warnings. (took 938ms)
+
