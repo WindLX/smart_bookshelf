@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBookshelf</title>
+    <script src="{{ url_for('static', filename='jquery-3.7.0.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
+</head>
+<body>
+    <nav>
+        <div id="state"></div>
+        <div class="nav-item" id="main">
+            <p>书架 Bookshelf</p>
+        </div>
+        <div class="nav-item" id="config">
+            <p>设置 Config</p>
+        </div>
+    </nav>
+    <div class="page" id="main">
+        <div class="content">
+            <div class="bookshelf">
+            </div>
+            <textarea rows="6" cols="50" class="custom-input" id="search"></textarea>
+            <div class="button-container">
+                <button class="update">更新</button>
+                <button class="search">查询</button>
+                <button class="asr">语音</button>
+            </div>
+        </div>
+    </div>
+    <div class="page" id="config">
+        <div class="content">
+            <button class="save">保存 Save</button>
+            <div class="content-block">
+                <div class="block">
+                    <h4 class="title">裁切与透视变换</h4>    
+                    <div class="slider-container">
+                        <div class="point-slider" id="left-top">
+                            <p>LeftTop</p>
+                            <input type="range" id="left-top-x" class="slider" min="0" max="50" step="0.1" value="0">
+                            <input type="range" id="left-top-y" class="slider" min="0" max="50" step="0.1" value="0">
+                        </div>
+                        <div class="point-slider" id="left-bottom">
+                            <p>LeftBottom</p>
+                            <input type="range" id="left-bottom-x" class="slider" min="0" max="50" step="0.1" value="0">
+                            <input type="range" id="left-bottom-y" class="slider" min="50" max="100" step="0.1" value="100">
+                        </div>
+                        <div class="point-slider" id="right-top">
+                            <p>RightTop</p>
+                            <input type="range" id="right-top-x" class="slider" min="50" max="100" step="0.1" value="100">
+                            <input type="range" id="right-top-y" class="slider" min="0" max="50" step="0.1" value="0">
+                        </div>
+                        <div class="point-slider" id="right-bottom">
+                            <p>RightBottom</p>
+                            <input type="range" id="right-bottom-x" class="slider" min="50" max="100" step="0.1" value="100">
+                            <input type="range" id="right-bottom-y" class="slider" min="50" max="100" step="0.1" value="100">
+                        </div>
+                        <div class="point-slider">
+                            <p>Horizon</p>
+                            <input type="range" id="horizon" min="0" max="100" step="0.1" value="0">
+                        </div>
+                    </div>
+                    <div class="img-container">
+                        <img src="{{ url_for('static', filename='pic/1.jpeg')}}" alt="test" id="image">
+                        <div class="horizon-line"></div>
+                    </div>
+                </div>
+                <div class="block" id="block2">
+                    <h4 class="title">其他配置</h4>
+                    <div class="line-container">
+                        <h4>OCR服务器地址</h4>
+                        <input type="text" class="custom-input" id="host" value="http://localhost:8080">
+                    </div>
+                    <div class="line-container">
+                        <h4>原始图片暂存路径</h4>
+                        <input type="text" class="custom-input" id="input_path" value="/ocr/pic">
+                    </div>
+                    <div class="line-container">
+                        <h4>切割图片暂存路径</h4>
+                        <input type="text" class="custom-input" id="output_path" value="/ocr/temp">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>图片缩放</h4>
+                            <h4 class="value"></h4>
+                        </div>
+                        <input type="range" min="0.01" max="1" step="0.01" value="1" id="scale">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>聚类半径</h4>
+                            <h4 class="value"></h4>
+                        </div>
+                        <input type="range" min="1" max="10" step="1" value="2" id="eps">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>最小书高</h4>
+                            <h4 class="value"></h4>
+                        </div>
+                        <input type="range" min="0.01" max="1" step="0.01" value="0.1" id="min_height_rate">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>最大数量</h4>
+                            <h4 class="value"></h4>
+                        </div>
+                        <input type="range" min="1" max="300" step="1" value="50" id="count">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>启用GPU</h4>
+                        </div>
+                        <input type="range" min="0" max="1" step="1" value="1" class="toggle" id="use_gpu">
+                    </div>
+                    <div class="line-container">
+                        <div class="line">
+                            <h4>OCR线程数</h4>
+                            <h4 class="value" id="th"></h4>
+                        </div>
+                        <input type="range" min="1" max="8" step="1" value="4" id="thread_count">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js')}}"></script>
+</body>
+</html>

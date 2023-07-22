@@ -1,0 +1,9 @@
+main.c:64:13:w5500_hard_rst	1
+main.c:73:12:w5500_chip_init	1
+main.c:79:13:w5500_phy_init	1
+main.c:90:13:w5500_network_init	1
+main.c:112:6:w5500_init	2
+main.c:128:6:uart_printf	1
+main.c:142:5:main	9
+main.c:228:6:SystemClock_Config	4
+main.c:294:6:Error_Handler	1

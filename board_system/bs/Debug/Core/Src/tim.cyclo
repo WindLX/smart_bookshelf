@@ -1,0 +1,6 @@
+tim.c:33:6:MX_TIM2_Init	6
+tim.c:87:6:MX_TIM3_Init	4
+tim.c:127:6:MX_TIM6_Init	3
+tim.c:160:6:HAL_TIM_Base_MspInit	5
+tim.c:228:6:HAL_TIM_MspPostInit	2
+tim.c:256:6:HAL_TIM_Base_MspDeInit	4

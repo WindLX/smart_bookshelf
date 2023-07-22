@@ -1,0 +1,10 @@
+2023-07-12 00:10:50,109 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2023-07-12 00:10:53,570 [ERROR] ConfigurationRetriever:142 - IOException on connection: Read timed out
+2023-07-12 15:31:41,331 [INFO] Activator:176 - 
+
+
+2023-07-12 15:31:41,333 [INFO] Activator:177 - !SESSION log4j initialized
+2023-07-12 15:31:47,941 [INFO] LogOutputStream:77 - [STDOUT_REDIRECT] 
+2023-07-12 15:32:11,280 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+2023-07-12 15:32:11,280 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SLF4J: Defaulting to no-operation (NOP) logger implementation
+2023-07-12 15:32:11,282 [ERROR] LogOutputStream:75 - [STDERR_REDIRECT] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.

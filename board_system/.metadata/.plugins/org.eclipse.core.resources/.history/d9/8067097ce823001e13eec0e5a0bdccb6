@@ -1,0 +1,70 @@
+/*
+ * camera.c
+ *
+ *  Created on: 2023年7月16日
+ *      Author: wind
+ */
+
+#include "camera.h"
+#include "usart.h"
+#include <stdio.h>
+Camera_HandleTypeDef camera;
+
+void Camera_Init(Camera_HandleTypeDef *camera, GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
+{
+	camera->GPIO_Pin = GPIO_Pin;
+	camera->GPIOx = GPIOx;
+	camera->camera_EN = 0;
+	camera->count = 0;
+	camera->work_count = 0;
+
+	HAL_GPIO_WritePin(camera->GPIOx, camera->GPIO_Pin, GPIO_PIN_RESET);
+}
+
+void Camera_Take(Camera_HandleTypeDef *camera, uint16_t time)
+{
+	if (camera->camera_EN == 1)
+	{
+		if (camera->count == 0)
+		{
+			HAL_GPIO_WritePin(camera->GPIOx, camera->GPIO_Pin, GPIO_PIN_SET);
+			  HAL_UART_Transmit(&huart3, (uint8_t *)"10", sizeof("10"), 100);
+//			HAL_Delay(5);
+			  HAL_UART_Transmit(&huart3, (uint8_t *)"13", sizeof("13"), 100);
+
+			HAL_GPIO_WritePin(camera->GPIOx, camera->GPIO_Pin, GPIO_PIN_RESET);
+			camera->work_count += 1;
+
+			  HAL_UART_Transmit(&huart3, (uint8_t *)"4", sizeof("4"), 100);
+		}
+		if(camera->count > time)
+		{
+			camera->count = -1;
+		}
+		camera->count += 1;
+	}
+}
+
+void Camera_Start(Camera_HandleTypeDef *camera)
+{
+	camera->count = 0;
+	camera->camera_EN = 1;
+	camera->work_count = 0;
+}
+
+void Camera_Reset(Camera_HandleTypeDef *camera)
+{
+	camera->count = 0;
+	camera->camera_EN = 0;
+	camera->work_count = 0;
+}
+
+Camera_State Camera_GetState(Camera_HandleTypeDef *camera)
+{
+	return (camera->camera_EN == 1) ? Camera_Work : Camera_Idle;
+}
+
+uint8_t Camera_GetCount(Camera_HandleTypeDef *camera)
+{
+	return camera->work_count;
+}

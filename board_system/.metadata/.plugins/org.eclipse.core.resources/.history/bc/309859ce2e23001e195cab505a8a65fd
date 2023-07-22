@@ -1,0 +1,41 @@
+/*
+ * pressure.h
+ *
+ *  Created on: 2023年7月15日
+ *      Author: wind
+ */
+
+#ifndef INC_PRESSURE_H_
+#define INC_PRESSURE_H_
+
+#include <string.h>
+#include "tim.h"
+#include "dma.h"
+
+#define PRESS_MIN	150
+#define PRESS_MAX	20000
+
+//以下2个参数根据获取方法：
+//理论上：
+// 1.薄膜压力传感器不是精准的压力测试传感器，只适合粗略测量压力用，不能当压力计精确测量。
+// 2. AO引脚输出的电压有效范围是0.1v到3.3v，而实际根据不同传感器范围会在这个范围内，并不一定是最大值3.3v，也可能低于3.3v，要实际万用表测量，
+// 	例程只是给出理论值，想要精确请自行万用表测量然后修正以下2个AO引脚电压输出的最大和最小值
+//调节方法：
+//薄膜压力传感器的AO引脚输出的增益范围是通过板载AO_RES电位器调节实现的，
+//想要稍微精准点，需要自己给定具体已知力，然后调节AO_RES电位器到串口输出重量正好是自己给定力就可以了
+#define VOLTAGE_MIN 100
+#define VOLTAGE_MAX 3300
+
+long PRESS_AO = 0;
+int VOLTAGE_AO = 0;
+
+typedef struct {
+	ADC_HandleTypeDef *hadc
+} Pressure_HandleTypeDef;
+
+extern Pressure_HandleTypeDef pressure;
+
+void Pressure_Init(Pressure_HandleTypeDef *pressure, ADC_HandleTypeDef *hadc);
+void Pressure_Read(Pressure_HandleTypeDef *pressure);
+
+#endif /* INC_PRESSURE_H_ */

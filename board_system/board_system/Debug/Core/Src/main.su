@@ -1,0 +1,9 @@
+../Core/Src/main.c:64:13:w5500_hard_rst	8	static
+../Core/Src/main.c:73:12:w5500_chip_init	16	static
+../Core/Src/main.c:79:13:w5500_phy_init	16	static
+../Core/Src/main.c:90:13:w5500_network_init	56	static
+../Core/Src/main.c:112:6:w5500_init	32	static
+../Core/Src/main.c:128:6:uart_printf	16	static
+../Core/Src/main.c:142:5:main	56	static,ignoring_inline_asm
+../Core/Src/main.c:228:6:SystemClock_Config	120	static
+../Core/Src/main.c:294:6:Error_Handler	4	static,ignoring_inline_asm

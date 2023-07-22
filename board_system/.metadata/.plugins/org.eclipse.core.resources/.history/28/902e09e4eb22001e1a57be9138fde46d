@@ -1,0 +1,22 @@
+/*
+ * utils.h
+ *
+ *  Created on: 2023年7月12日
+ *      Author: wind
+ */
+
+#ifndef INC_UTILS_H_
+#define INC_UTILS_H_
+
+#include "stm32h7xx_hal.h"
+
+typedef enum {
+	Normal = 0,
+	Monitor = 1
+}SysState;
+
+extern uint8_t receive_data[1000];
+
+double* parseStringToArray(const char* str, int* count);
+
+#endif /* INC_UTILS_H_ */

@@ -1,0 +1,6 @@
+camera.c:12:6:Camera_Init	1
+camera.c:20:6:Camera_Take	4
+camera.c:39:6:Camera_Start	1
+camera.c:46:6:Camera_Reset	1
+camera.c:53:14:Camera_GetState	1
+camera.c:58:9:Camera_GetCount	1

@@ -1,0 +1,116 @@
+#include "led_control.h"
+
+Led_HandleTypeDef led;
+
+void Led_Init(Led_HandleTypeDef *led, TIM_HandleTypeDef *htim, uint32_t Channel)
+{
+	led->channel = Channel;
+	led->htim = htim;
+	led->led_En = 0;
+	memset(led->led_Rst, 0, sizeof(uint32_t) * 240);
+	memset(led->led_SendBuf0, 0, sizeof(uint32_t) * 25);
+	memset(led->led_SendBuf1, 0, sizeof(uint32_t) * 25);
+	memset(led->led_data, 0, sizeof(uint32_t) * LED_NUM);
+}
+
+void led_uint32ToData(uint32_t Data, uint32_t *Ret)
+{
+    uint32_t zj = Data;
+    uint8_t *p = (uint8_t *)&zj;
+    uint8_t R = 0, G = 0, B = 0;
+    B = *(p);     // B
+    G = *(p + 1); // G
+    R = *(p + 2); // R
+    zj = (G << 16) | (R << 8) | B;
+    for (int i = 0; i < 24; i++)
+    {
+        if (zj & (1 << 23))
+            Ret[i] = LED_CODE_1;
+        else
+            Ret[i] = LED_CODE_0;
+        zj <<= 1;
+    }
+    Ret[24] = 0;
+}
+
+void Led_Start(Led_HandleTypeDef *led)
+{
+	HAL_TIM_PWM_Start_DMA(led->htim, led->channel, (uint32_t *)led->led_Rst, 240);
+	led_uint32ToData(led->led_data[0], led->led_SendBuf0);
+	led->led_En = 1;
+}
+
+void Led_Code_Reset(Led_HandleTypeDef *led)
+{
+	HAL_TIM_PWM_Start_DMA(led->htim, led->channel, (uint32_t *)led->led_Rst, 240);
+	led->led_En = 0;
+}
+
+void Led_Send(Led_HandleTypeDef *led)
+{
+    static uint32_t j = 0;
+    static uint32_t ins = 0;
+    if (led->led_En == 1)
+    {
+        if (j == LED_NUM)
+        {
+            j = 0;
+            HAL_TIM_PWM_Stop_DMA(led->htim, led->channel);
+            led->led_En = 0;
+            return;
+        }
+        j += 1;
+        if (ins == 0)
+        {
+        	HAL_TIM_PWM_Start_DMA(led->htim, led->channel, led->led_SendBuf0, 25);
+            led_uint32ToData(led->led_data[j], led->led_SendBuf1);
+            ins = 1;
+        }
+        else
+        {
+        	HAL_TIM_PWM_Start_DMA(led->htim, led->channel, led->led_SendBuf1, 25);
+            led_uint32ToData(led->led_data[j], led->led_SendBuf0);
+            ins = 0;
+        }
+    }
+}
+
+void Led_Set(Led_HandleTypeDef *led, int index, uint8_t r, uint8_t g, uint8_t b)
+{
+	if (index >= LED_NUM) return;
+	else {
+		uint32_t result = 0;
+
+		result |= r;
+		result <<= 8;
+
+		result |= g;
+		result <<= 8;
+
+		result |= b;
+		led->led_data[index] = result;
+	}
+}
+
+void Led_Reset(Led_HandleTypeDef *led, int index)
+{
+	if (index >= LED_NUM) return;
+	else {
+		led->led_data[index] = 0;
+	}
+}
+
+void Led_All_Reset(Led_HandleTypeDef *led)
+{
+	memset(led->led_data, 0, sizeof(uint32_t) * LED_NUM);
+}
+
+void Led_Range_Set(Led_HandleTypeDef *led, float coor, uint8_t r, uint8_t g, uint8_t b)
+{
+	int middle = (int)((LED_TRUE_NUM - 1) * 0.8);
+	int bottom = MAX(middle - 1, 0);
+	int top = MIN(middle + 1, (LED_TRUE_NUM - 1));
+	for (int i = bottom; i < top; i++) {
+		Led_Set(led, i, r, g, b);
+	}
+}

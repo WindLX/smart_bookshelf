@@ -1,0 +1,95 @@
+#include "stm32h7xx_hal.h"
+#include "utils.h"
+#include "usart.h"
+#include "tim.h"
+#include "led_control.h"
+#include "camera.h"
+#include "oled.h"
+#include <string.h>
+
+extern int t;
+static int state = 0;
+static count = 0;
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+#ifndef MYDEBUG
+	if (huart->Instance == USART3)
+#else
+	if (huart->Instance == USART6)
+#endif
+	{
+		if (receive_data[0] == 'a')
+		{
+			DrawText(0);
+			state = 1;
+		}
+		else if (receive_data[0] == 'b')
+		{
+			DrawText(2);
+			state = 1;
+		}
+		else if (receive_data[0] == 'c')
+		{
+			DrawText(1);
+			state = 1;
+		}
+		if (Size > 1)
+		{
+			int count = 0;
+			if (receive_data[0] == 'a')
+			{
+				char dest[12];
+
+				memset(dest, '\0', sizeof(dest));
+				strncpy(dest, receive_data + 1, sizeof(receive_data));
+			}
+			double* array = parseStringToArray((const char*)receive_data, &count);
+//				char msg[10];
+//				sprintf(msg, "%d\n", Size);
+
+//				HAL_UART_Transmit_DMA(&huart3, (uint8_t *)msg, sizeof(msg));
+//			HAL_UART_Transmit_DMA(&huart3, receive_data, Size);
+			Led_All_Reset(&led);
+			if (array != NULL) {
+				for (int i = 0; i < count; i++) {
+					Led_Range_Set(&led, (float)array[i], 0, 212, 70);
+				}
+				Led_Start(&led);
+			}
+			free(array);
+		}
+#ifndef MYDEBUG
+		HAL_UARTEx_ReceiveToIdle_DMA(&huart3, receive_data, BUFFER_SIZE);
+		__HAL_DMA_DISABLE_IT(&hdma_usart3_rx, DMA_IT_HT);
+#else
+		HAL_UARTEx_ReceiveToIdle_DMA(&huart6, receive_data, BUFFER_SIZE);
+		__HAL_DMA_DISABLE_IT(&hdma_usart6_rx, DMA_IT_HT);
+#endif
+	}
+}
+
+void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim->Instance == TIM2) {
+		Led_Send(&led);
+	}
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim->Instance == TIM3)
+	{
+		Camera_Take(&camera, 60);
+		count++;
+		if (count == 3)
+		{
+			count = 0;
+			DrawBG();
+		}
+	}
+	else if (htim->Instance == TIM6) {
+	    DrawMouch(t);
+	    t = (t+1) % 4;
+	}
+}

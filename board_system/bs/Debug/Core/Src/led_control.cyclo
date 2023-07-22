@@ -1,0 +1,9 @@
+led_control.c:6:6:Led_Init	1
+led_control.c:17:6:led_uint32ToData	3
+led_control.c:37:6:Led_Start	1
+led_control.c:44:6:Led_Code_Reset	1
+led_control.c:50:6:Led_Send	4
+led_control.c:79:6:Led_Set	2
+led_control.c:96:6:Led_Reset	2
+led_control.c:104:6:Led_All_Reset	1
+led_control.c:109:6:Led_Range_Set	2

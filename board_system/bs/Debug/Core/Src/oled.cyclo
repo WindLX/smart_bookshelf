@@ -1,0 +1,16 @@
+oled.c:123:6:Write_IIC_Command	1
+oled.c:130:6:Write_IIC_Data	1
+oled.c:137:6:OLED_WR_Byte	2
+oled.c:146:6:fill_picture	3
+oled.c:163:6:OLED_Set_Pos	1
+oled.c:170:6:OLED_Display_On	1
+oled.c:177:6:OLED_Display_Off	1
+oled.c:184:6:OLED_Clear	3
+oled.c:195:6:OLED_On	3
+oled.c:207:10:oled_pow	2
+oled.c:215:6:OLED_DrawBMP	4
+oled.c:231:6:OLED_Init	1
+oled.c:269:6:DrawBG	1
+oled.c:272:6:DrawMouch	1
+oled.c:275:6:DrawPosition	1
+oled.c:279:6:DrawText	1

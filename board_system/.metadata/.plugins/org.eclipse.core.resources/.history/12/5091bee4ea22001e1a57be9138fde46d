@@ -1,0 +1,40 @@
+/*
+ * utils.c
+ *
+ *  Created on: 2023年7月12日
+ *      Author: wind
+ */
+
+#include "utils.h"
+
+uint8_t receive_data[1000];
+
+double* parseStringToArray(const char* str, int* count) {
+    const char* delimiter = ", ";
+
+    // 计算字符串中的元素个数
+    *count = 1;
+    for (int i = 0; i < strlen(str); i++) {
+        if (str[i] == ',') {
+            (*count)++;
+        }
+    }
+
+    // 动态分配数组内存
+    double* array = (double*)malloc(*count * sizeof(double));
+    if (array == NULL) {
+        printf("内存分配失败\n");
+        return NULL;
+    }
+
+    // 解析字符串为数组
+    char* token = strtok((char*)str, delimiter);
+    int index = 0;
+
+    while (token != NULL) {
+        array[index++] = atof(token);
+        token = strtok(NULL, delimiter);
+    }
+
+    return array;
+}

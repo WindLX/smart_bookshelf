@@ -1,0 +1,5 @@
+../Core/Src/pressure.c:12:10:ADC_ReadData	24	static
+../Core/Src/pressure.c:24:10:ADC_average	24	static
+../Core/Src/pressure.c:35:9:map	24	static
+../Core/Src/pressure.c:39:6:Pressure_Init	24	static
+../Core/Src/pressure.c:45:9:Pressure_Read	40	static

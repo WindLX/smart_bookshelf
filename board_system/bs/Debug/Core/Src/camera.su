@@ -1,0 +1,6 @@
+../Core/Src/camera.c:12:6:Camera_Init	16	static
+../Core/Src/camera.c:20:6:Camera_Take	24	static
+../Core/Src/camera.c:39:6:Camera_Start	16	static
+../Core/Src/camera.c:46:6:Camera_Reset	16	static
+../Core/Src/camera.c:53:14:Camera_GetState	16	static
+../Core/Src/camera.c:58:9:Camera_GetCount	16	static

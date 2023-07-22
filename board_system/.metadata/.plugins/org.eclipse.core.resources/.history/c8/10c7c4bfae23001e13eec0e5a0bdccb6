@@ -1,0 +1,25 @@
+/*
+ * camera.h
+ *
+ *  Created on: 2023年7月16日
+ *      Author: wind
+ */
+
+#ifndef INC_CAMERA_H_
+#define INC_CAMERA_H_
+
+#include "gpio.h"
+
+typedef struct {
+	GPIO_TypeDef *GPIOx;
+	uint16_t GPIO_Pin;
+	uint32_t count;
+	uint8_t camera_EN;
+}Camera_HandleTypeDef;
+
+extern Camera_HandleTypeDef camera;
+
+void Camera_Init(Camera_HandleTypeDef *camera, GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
+void Camera_Take(Camera_HandleTypeDef *camera);
+
+#endif /* INC_CAMERA_H_ */

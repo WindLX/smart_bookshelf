@@ -1,0 +1,6 @@
+../Core/Src/database_server.c:7:6:parseBooks	48	static
+../Core/Src/database_server.c:34:13:read_file	32	static
+../Core/Src/database_server.c:63:17:database_server_new	40	static
+../Core/Src/database_server.c:101:6:database_server_drop	16	static
+../Core/Src/database_server.c:112:6:database_server_update	32	static
+../Core/Src/database_server.c:147:7:database_server_search	24	static

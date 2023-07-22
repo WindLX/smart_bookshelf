@@ -1,0 +1,65 @@
+#include "stm32h7xx_hal.h"
+#include "utils.h"
+#include "usart.h"
+#include "tim.h"
+#include "led_control.h"
+#include "camera.h"
+#include "oled.h"
+#include <string.h>
+
+extern int t;
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+	if (huart == &huart2) {
+		__HAL_DMA_DISABLE_IT(&hdma_usart2_rx, DMA_IT_HT);
+		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, receive_data, sizeof(receive_data));
+
+		HAL_UART_Transmit(&huart3, (uint8_t *)receive_data, sizeof(receive_data), 100);
+
+		if (strlen((char *)receive_data) > 1)
+		{
+			if (strcmp((char *)receive_data, "ok\n") == 0)
+			{
+				DrawText(0);
+			}
+			else {
+				int count = 0;
+				double* array = parseStringToArray((char *)receive_data, &count);
+
+	//			char msg[100];
+	//			sprintf(msg, "%f, %f, %f\n", array[0], array[1], array[2]);
+	//			HAL_UART_Transmit(&huart3, (uint8_t *)receive_data, sizeof(receive_data), 100);
+
+				Led_All_Reset(&led);
+				if (array != NULL) {
+					for (int i = 0; i < count; i++) {
+						Led_Range_Set(&led, array[i], 0, 212, 70);
+					}
+					Led_Start(&led);
+				}
+				DrawText(1);
+				free(array);
+			}
+		}
+	}
+}
+
+void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim->Instance == TIM2) {
+		Led_Send(&led);
+	}
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim->Instance == TIM3)
+	{
+		Camera_Take(&camera, 120);
+	}
+	else if (htim->Instance == TIM6) {
+	    DrawMouch(t);
+	    t = (t+1) % 4;
+	}
+}

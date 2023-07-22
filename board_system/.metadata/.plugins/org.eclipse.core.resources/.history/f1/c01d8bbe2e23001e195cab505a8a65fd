@@ -1,0 +1,24 @@
+/*
+ * pressure.h
+ *
+ *  Created on: 2023年7月15日
+ *      Author: wind
+ */
+
+#ifndef INC_PRESSURE_H_
+#define INC_PRESSURE_H_
+
+#include <string.h>
+#include "tim.h"
+#include "dma.h"
+
+typedef struct {
+
+} Pressure_HandleTypeDef;
+
+extern Pressure_HandleTypeDef pressure;
+
+void Pressure_Init(Pressure_HandleTypeDef *pressure, ADC_HandleTypeDef *hadc, uint32_t Channel);
+void Pressure_Read(Pressure_HandleTypeDef *pressure);
+
+#endif /* INC_PRESSURE_H_ */

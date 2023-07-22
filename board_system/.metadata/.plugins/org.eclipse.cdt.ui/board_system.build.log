@@ -1,0 +1,17 @@
+15:12:06 **** Build of configuration Debug for project board_system ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m7 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32H7A3xxQ -c -I../Core/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc -I../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32H7xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "board_system.elf" @"objects.list"   -mcpu=cortex-m7 -T"D:\Project\smart_bookshelf\board_system\board_system\STM32H7A3ZITXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="board_system.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: board_system.elf
+ 
+arm-none-eabi-size   board_system.elf 
+arm-none-eabi-objdump -h -S  board_system.elf  > "board_system.list"
+   text	   data	    bss	    dec	    hex	filename
+  32156	     72	   2008	  34236	   85bc	board_system.elf
+Finished building: default.size.stdout
+ 
+Finished building: board_system.list
+ 
+
+15:12:07 Build Finished. 0 errors, 0 warnings. (took 1s.472ms)
+
